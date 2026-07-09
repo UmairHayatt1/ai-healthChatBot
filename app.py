@@ -5,6 +5,7 @@ from openai import OpenAI
 st.set_page_config(page_title="AI Health Assistant", page_icon="🩺")
 st.title("🩺 AI Health ChatBot")
 st.markdown("*Solving healthcare delays through instant symptom triage and health education.*")
+st.markdown("*BY UMAIR HAYAT*")
 
 # 2. Sidebar for Secure API Key Entry
 api_key_input = st.sidebar.text_input("Enter your OpenAI API Key:", type="password")
