@@ -4,8 +4,8 @@ from openai import OpenAI
 # 1. Page Layout Configuration
 st.set_page_config(page_title="AI Health Assistant", page_icon="🩺")
 st.title("🩺 AI Health ChatBot")
-st.markdown("*Solving healthcare delays through instant symptom triage and health education.*")
-st.markdown("*BY UMAIR HAYAT*")
+st.markdown("<h3 style='text-align: center;'><b>Solving healthcare delays through instant symptom triage and health education.</b></h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center;'><b>BY UMAIR HAYAT</b></h3>", unsafe_allow_html=True)
 
 # 2. Sidebar for Secure API Key Entry
 api_key_input = st.sidebar.text_input("Enter your OpenAI API Key:", type="password")
