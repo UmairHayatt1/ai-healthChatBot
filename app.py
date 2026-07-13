@@ -6,7 +6,7 @@ st.set_page_config(page_title="FitTrack AI", page_icon="🏋️‍♂️", layou
 st.title("🏋️‍♂️ FitTrack Fitness & Nutrition AI")
 
 # Added your name centered right in the middle section
-st.markdown("*Your hyper-focused domain assistant for Food Logging, Calorie Deficit Tracking, and Workout Design.*")
+st.markdown("*An AI Assistant for Food Logging, Calorie Deficit Tracking, and Workout Design.*")
 
 
 st.markdown("<p style='text-align: center; color: gray;'>BY UMAIR HAYAT</p>", unsafe_allow_html=True)
