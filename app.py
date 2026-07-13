@@ -3,7 +3,11 @@ from openai import OpenAI
 
 # 1. Page Layout & Setup (Visual UI Emojis are fine here)
 st.set_page_config(page_title="FitTrack AI", page_icon="🏋️‍♂️", layout="centered")
-st.title("🏋️‍♂️ FitTrack: Specialized Fitness & Nutrition AI")
+st.title("🏋️‍♂️ FitTrack Fitness & Nutrition AI")
+
+# Added your name centered right in the middle section
+st.markdown("<p style='text-align: center; color: gray;'>BY Umair Hayat</p>", unsafe_allow_html=True)
+
 st.markdown("*Your hyper-focused domain assistant for Food Logging, Calorie Deficit Tracking, and Workout Design.*")
 
 # 2. Sidebar Secure Key Input
