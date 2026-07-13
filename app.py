@@ -1,67 +1,64 @@
 import streamlit as st
 from openai import OpenAI
 
-# 1. Page Layout Configuration
-st.set_page_config(page_title="AI Health Assistant", page_icon="🩺")
-st.title("🩺 AI Health ChatBot")
-st.markdown("*Solving healthcare delays through instant symptom triage and health education.*")
-st.markdown("<h4 style='text-align: center;'><b>BY  UMAIR HAYAT</b></h3>", unsafe_allow_html=True)
+# 1. Page Layout & Setup
+st.set_page_config(page_title="FitTrack AI", page_icon="🏋️‍♂️", layout="centered")
+st.title("🏋️‍♂️ FitTrack: Specialized Fitness & Nutrition AI")
+st.markdown("*Your hyper-focused domain assistant for Food Logging, Calorie Deficit Tracking, and Workout Design.*")
 
-# 2. Sidebar for Secure API Key Entry
+# 2. Sidebar Secure Key Input
 api_key_input = st.sidebar.text_input("Enter your OpenAI API Key:", type="password")
 
 if not api_key_input:
     st.info("Please enter your OpenAI API key in the sidebar to begin.", icon="🔑")
     st.stop()
 
-# 3. Initialize the OpenAI Client
+# 3. Initialize OpenAI Client Connection
 client = OpenAI(api_key=api_key_input)
 
-# 4. Mandatory Medical Disclaimer Box (Shows high professionalism for your project)
-st.warning(
-    "⚠️ **Disclaimer:** This chatbot is an AI-powered educational tool for symptom triage. "
-    "It does not provide official medical diagnoses or treatments. If you are experiencing a life-threatening emergency, "
-    "please call your local emergency services immediately."
-)
-
-# 5. Initialize Chat History with a Medical Persona
+# 4. Initialize Memory & Strict Domain System Prompt
 if "messages" not in st.session_state:
     st.session_state.messages = [
         {
             "role": "system", 
             "content": (
-                "You are an empathetic, professional AI Medical Triage Assistant named MediTriage.\n"
-                "Your goal is to ask clarifying questions about a patient's symptoms, offer helpful educational health insights, "
-                "and categorize their risk level.\n\n"
-                "Follow these strict clinical rules:\n"
-                "1. Start by asking for the patient's age and how long they have experienced the symptoms.\n"
-                "2. Check for critical 'red flag' symptoms (e.g., chest pain, severe shortness of breath, sudden numbness).\n"
-                "3. Based on their answers, explicitly provide a 'Triage Recommendation':\n"
-                "   - EMERGENCY: Advise them to visit an ER immediately.\n"
-                "   - ROUTINE: Advise booking an appointment with a primary care doctor.\n"
-                "   - SELF-CARE: Provide safe, standard home care tips (rest, hydration) while monitoring symptoms.\n"
-                "4. Always end your advice with a reminder to consult a human physician."
+                "Identity & Domain Restriction:\n"
+                "You are 'FitTrack AI,' a deeply specialized, domain-specific AI Fitness and Nutrition Coach. "
+                "You are strictly restricted to answering questions regarding fitness, exercise, food logging, "
+                "macronutrients, TDEE calculation, weight loss, muscle gain, and workout planning.\n\n"
+                "STRICT OUT-OF-DOMAIN RULE: If the user asks about ANY topic outside of fitness and nutrition "
+                "(e.g., medical diagnoses, mental health, coding, cars, pop culture, history, general technology), "
+                "you must absolutely refuse to answer. Use this exact refusal statement:\n"
+                "'I am a dedicated Fitness & Nutrition AI Assistant. I am strictly restricted to answering questions regarding workouts, diet, and fitness tracking, so I cannot assist with that topic. Please let me know how I can help you reach your physical fitness goals.'\n\n"
+                "Core Feature Requirements:\n"
+                "1. Food Logging: Analyze natural meal descriptions (e.g., 'aloo paratha with yogurt'). Instantly calculate and return an estimated breakdown of Calories, Protein, Carbs, and Fats.\n"
+                "2. Calorie Deficit Tracking: Calculate user TDEE when provided age, weight, height, and activity level. Establish a daily target for fat loss/muscle gain, tracking eaten vs burned metrics with daily summaries (calories remaining, protein targets).\n"
+                "3. Workout Suggestions: Generate specific, structured workout routines when given constraints like time, equipment available, and training goal. Include exercise names, sets, reps, rest times, and estimated total calories burned.\n\n"
+                "Tone & Motivation:\n"
+                "Maintain a highly motivating, energetic, coaching-focused, and supportive tone. Actively encourage progress updates and suggest macro-friendly meals if the user indicates they have remaining calorie budgets left."
             )
         }
     ]
 
-# Display previous conversation history in the UI (skipping system prompt)
+# Display conversation history (hiding the background system setup)
 for msg in st.session_state.messages:
     if msg["role"] != "system":
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
 
-# 6. Accept Interactive User Input
-if user_input := st.chat_input("Describe your symptoms (e.g., 'I have a mild fever and a sore throat')..."):
+# 5. Capture User Input
+if user_input := st.chat_input("Log a meal, calculate your TDEE, or ask for a workout plan..."):
+    # Display user chat bubble
     with st.chat_message("user"):
         st.markdown(user_input)
     
+    # Save to session history array
     st.session_state.messages.append({"role": "user", "content": user_input})
 
-    # 7. Generate Medical Triage Response using conversation context
+    # 6. Generate Response using the conversation context transcript
     with st.chat_message("assistant"):
         try:
-            # Structuring the history string for your client.responses endpoint
+            # Map historical array list to context string pattern
             chat_context = "\n".join([f"{m['role'].capitalize()}: {m['content']}" for m in st.session_state.messages])
             
             response = client.responses.create(
@@ -73,7 +70,8 @@ if user_input := st.chat_input("Describe your symptoms (e.g., 'I have a mild fev
             ai_response = response.output_text
             st.markdown(ai_response)
             
+            # Save generated response to session history array
             st.session_state.messages.append({"role": "assistant", "content": ai_response})
             
         except Exception as e:
-            st.error(f"An error occurred: {e}")
+            st.error(f"An error occurred while communicating with the model: {e}")
